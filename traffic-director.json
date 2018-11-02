@@ -1,0 +1,286 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "description": "Interface Definition Language (IDL) for Global Multicloud Traffic Direction. This provides an interface between a Control Plane for Traffic Direction and a Management Plane (API, User Interface and Command Line Interface)",
+    "version": "0.1.0",
+    "title": "Traffic Director",
+    "contact": {
+      "name": "HomeAway Cloud Engineering",
+      "email": "cloud-oss@groups.homeawaycorp.com"
+    }
+  },
+  "paths": {
+    "/routes": {
+      "get": {
+        "summary": "Get Routes",
+        "description": "Simple List of all Routes for demonstration purposes. A production-grade solution might use GraphQL instead: https://graphql.org/learn/serving-over-http/",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Status 200",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Route"
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "Create Route",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Route"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Status 200",
+            "schema": {
+              "$ref": "#/definitions/Route"
+            }
+          }
+        }
+      }
+    },
+    "/routes/{id}": {
+      "get": {
+        "summary": "Get Route",
+        "description": "Get a single Route by Route.id",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Status 200",
+            "schema": {
+              "$ref": "#/definitions/Route"
+            }
+          },
+          "404": {
+            "description": "Route Not Found"
+          }
+        }
+      },
+      "put": {
+        "summary": "Update Route",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Route"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Status 200",
+            "schema": {
+              "$ref": "#/definitions/Route"
+            }
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete Route",
+        "description": "Delete a Route record based on the provided Route.id value.",
+        "parameters": [],
+        "responses": {
+          "204": {
+            "description": "Route Deleted"
+          }
+        }
+      },
+      "parameters": [
+        {
+          "name": "id",
+          "in": "path",
+          "required": true,
+          "type": "string",
+          "description": "Identifier for Route"
+        }
+      ]
+    },
+    "/routes/entries": {
+      "get": {
+        "description": "Read Only Resource for accessing RouteEntry records based on a provided set of filters as query parameters",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "host",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "description": "Host header value"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Status 200",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/RouteEntry"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/regions": {
+      "get": {
+        "summary": "GET all regions",
+        "description": "Read Only Array of all regions. This is configured within the service and cannot be updated via an API.",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Status 200",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Region"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "Region": {
+      "type": "object",
+      "required": [
+        "alias",
+        "uri"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "UUID to locate a specific Region record. This is typically assigned by a Data Access Layer so it is not accepted during record creation and required for updates."
+        },
+        "alias": {
+          "type": "string",
+          "description": "Alias used to identify a Region for Upstream routing. This is necessary to decouple the specific details of the Regional Upstream when defining Routes. A lookup is required as part of the resolution to a region."
+        },
+        "uri": {
+          "type": "string",
+          "description": "Uniform Resource Identifier (URI) that defines the location of the region e.g. fully qualified URL"
+        }
+      },
+      "description": "Regional Upstream"
+    },
+    "Route": {
+      "type": "object",
+      "required": [
+        "id",
+        "path",
+        "role",
+        "upstream"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "UUID to locate a specific Route record. This is typically assigned by a Data Access Layer so it is not accepted during Route record creation and required for updates"
+        },
+        "host": {
+          "type": "string",
+          "description": "HTTP Host header value that support this Route. If absent then this Route will map to any Host header value."
+        },
+        "path": {
+          "type": "string",
+          "description": "Route Matchers will assert whether an HTTP path starts with this value. A valid path String starts with \"/\". Typically matchers will be evaluated in reverse alphabetical order to ensure the most-specific match is found first."
+        },
+        "upstream": {
+          "$ref": "#/definitions/Upstream"
+        },
+        "role": {
+          "type": "string",
+          "description": "Specifies the role of this Route. This is used to determine which Route should handle traffic when there are multiple Routes that map to the same combination of host and path.",
+          "enum": [
+            "primary",
+            "fallback",
+            "inactive",
+            "variant"
+          ]
+        }
+      }
+    },
+    "Upstream": {
+      "type": "object",
+      "required": [
+        "uri"
+      ],
+      "properties": {
+        "uri": {
+          "type": "string",
+          "description": "Uniform Resource Identifier (URI) that defines the Service location e.g. fully qualified URL or a path that maps to a downstream Service Discovery solution."
+        },
+        "locator": {
+          "$ref": "#/definitions/UpstreamLocator"
+        }
+      },
+      "description": "Upstream destination, either derived from a URL or discoverable using a Service Discovery mechanism and a Service Mesh or Discovery-aware Load Balancer"
+    },
+    "UpstreamLocator": {
+      "type": "object",
+      "properties": {
+        "region": {
+          "type": "string",
+          "description": "Regional Upstream Alias"
+        },
+        "service": {
+          "type": "string",
+          "description": "Service name used for Service Discovery"
+        },
+        "tag": {
+          "type": "string",
+          "description": "Service tag used for Service Discovery"
+        }
+      },
+      "description": "Collection of attributes used to locate a remote upstream"
+    },
+    "RouteEntry": {
+      "type": "object",
+      "properties": {
+        "path": {
+          "type": "string",
+          "description": "Concatenated path of a Route - must be unique and is derived from the Route model."
+        },
+        "uri": {
+          "type": "string",
+          "description": "Upstream uri"
+        }
+      },
+      "description": "Pair of a Route concatenated path String and a Route Upstream uri String"
+    }
+  }
+}

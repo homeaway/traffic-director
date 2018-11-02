@@ -1,0 +1,464 @@
+{
+	"info": {
+		"_postman_id": "56d49b71-8484-4606-b748-0fcca65f907d",
+		"name": "Traffic Director",
+		"description": "Interface Definition Language (IDL) for Global Multicloud Traffic Direction. This provides an interface between a Control Plane for Traffic Direction and a Management Plane (API, User Interface and Command Line Interface)",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "routes",
+			"item": [
+				{
+					"name": "Create Route",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "b98b33ea-c4ea-434a-a856-84a3f6865880",
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"id": "ff721966-6060-425f-b869-bea62ffd9874",
+								"exec": [
+									"pm.test(\"Body matches string\", function () {",
+									"    pm.expect(pm.response.text()).to.include(\"PRIMARY\");",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"id\":\"c238c951-cde3-4450-b817-fc07ff52109d\",\n\t\"path\":\"/foo\",\n\t\"upstream\":{\n\t\t\"locator\":{\n\t\t\t\"service\":\"hello-cloud-app\"\n\t\t}\n\t}\n}"
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/v1/routes",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"routes"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Route",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "1ee998e0-bb6e-4d9d-87b3-ddc82a35e8ce",
+								"type": "text/javascript",
+								"exec": [
+									""
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/v1/routes/c238c951-cde3-4450-b817-fc07ff52109d",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"routes",
+								"c238c951-cde3-4450-b817-fc07ff52109d"
+							]
+						},
+						"description": "Get a single Route by Route.id"
+					},
+					"response": []
+				},
+				{
+					"name": "Update Route",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "30309ce2-12b1-4e6d-bf2d-3841e5828c7c",
+								"type": "text/javascript",
+								"exec": [
+									"pm.globals.set(\"id\", \"c238c951-cde3-4450-b817-fc07ff52109d\");"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"id\": \"c238c951-cde3-4450-b817-fc07ff52109d\",\n    \"path\": \"/hello\",\n    \"upstream\": {\n        \"uri\": \"\",\n        \"locator\": {\n            \"region\": \"local\",\n            \"service\": \"hello-cloud-app\"\n        }\n    },\n    \"role\": \"PRIMARY\"\n}"
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/v1/routes/c238c951-cde3-4450-b817-fc07ff52109d",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"routes",
+								"c238c951-cde3-4450-b817-fc07ff52109d"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Route",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"path\":\"/hello\",\n\t\"host\":\"delete\",\n\t\"upstream\":{\n\t\t\"locator\":{\n\t\t\t\"service\":\"hello-cloud-app\"\n\t\t}\n\t}\n}"
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/v1/routes",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"routes"
+							]
+						},
+						"description": "Delete a Route record based on the provided Route.id value."
+					},
+					"response": []
+				},
+				{
+					"name": "Create Route hello",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "fabf5354-e817-4a85-8350-383ac616c73a",
+								"type": "text/javascript",
+								"exec": [
+									"pm.globals.set(\"id\", \"c238c951-cde3-4450-b817-fc07ff52109d\");"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"path\":\"/hello\",\n\t\"upstream\":{\n\t\t\"locator\":{\n\t\t\t\"service\":\"hello-cloud-app\"\n\t\t}\n\t}\n}"
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/v1/routes",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"routes"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Route cloud",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"path\":\"/cloud\",\n\t\"upstream\":{\n\t\t\"locator\":{\n\t\t\t\"tag\":\"live\",\n\t\t\t\"service\":\"hello-cloud-app\"\n\t\t}\n\t}\n}"
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/v1/routes",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"routes"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Route cloud fallback",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"path\":\"/cloud\",\n\t\"role\":\"FALLBACK\",\n\t\"upstream\":{\n\t\t\"locator\":{\n\t\t\t\"tag\":\"fallback\",\n\t\t\t\"service\":\"hello-cloud-app\"\n\t\t}\n\t}\n}"
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/v1/routes",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"routes"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Routes",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/v1/routes",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"routes"
+							]
+						},
+						"description": "Simple List of all Routes for demonstration purposes. A production-grade solution might use GraphQL instead: https://graphql.org/learn/serving-over-http/"
+					},
+					"response": []
+				},
+				{
+					"name": "Get Route Entries",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/v1/routes/entries",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"routes",
+								"entries"
+							]
+						},
+						"description": "Read Only Resource for accessing RouteEntry records based on a provided set of filters as query parameters"
+					},
+					"response": []
+				},
+				{
+					"name": "Get Route Entries with host param",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "5998631d-4c2e-49ca-9044-700c5f260df3",
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/v1/routes/entries?host=localhost",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"routes",
+								"entries"
+							],
+							"query": [
+								{
+									"key": "host",
+									"value": "localhost"
+								}
+							]
+						},
+						"description": "Read Only Resource for accessing RouteEntry records based on a provided set of filters as query parameters"
+					},
+					"response": []
+				}
+			],
+			"description": "Folder for routes"
+		},
+		{
+			"name": "regions",
+			"item": [
+				{
+					"name": "GET all regions",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/v1/regions",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"regions"
+							]
+						},
+						"description": "Read Only Array of all regions. This is configured within the service and cannot be updated via an API."
+					},
+					"response": []
+				}
+			],
+			"description": "Folder for regions"
+		}
+	]
+}
