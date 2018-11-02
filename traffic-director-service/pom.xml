@@ -37,7 +37,7 @@
 				<artifactId>dockerfile-maven-plugin</artifactId>
 				<version>1.4.8</version>
 				<configuration>
-					<repository>cloud/${project.artifactId}</repository>
+					<repository>homeaway/${project.artifactId}</repository>
 					<tag>${project.version}</tag>
 					<buildArgs>
 						<JAR_FILE>target/${project.build.finalName}.jar</JAR_FILE>
