@@ -1,5 +1,5 @@
 # traffic-director
-Globabl Multicloud Traffic Management Interface Definition Language (IDL) and control / management components
+Global Multicloud Traffic Management Interface Definition Language (IDL) and control / management components
 
 # traffic-director-service
 
